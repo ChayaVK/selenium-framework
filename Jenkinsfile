@@ -7,6 +7,7 @@ pipeline {
 
     triggers {
         cron('H 2 * * *')    // runs nightly around 2 AM
+        pollSCM('H/5 * * * *')   // checks every 5 mins for new commit
     }
 
     stages {
