@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+   parameters {
+        choice(name: 'BROWSER', choices: ['chrome', 'firefox', 'edge'],
+               description: 'Browser to run the tests on')
+    }
     tools {
         maven 'Maven3'
     }

@@ -10,6 +10,7 @@ public class ConfigReader {
         try (InputStream input = ConfigReader.class.getClassLoader()
                 .getResourceAsStream("config.properties"))
         {
+
             prop.load(input);
         }
         catch (Exception e) {
@@ -18,6 +19,12 @@ public class ConfigReader {
     }
 
     public static String get(String key) {
+        // 1st priority: value passed from command line / Jenkins (-Dbrowser=firefox)
+        String fromCommandLine = System.getProperty(key);
+        if (fromCommandLine != null && !fromCommandLine.isBlank()) {
+            return fromCommandLine;
+        }
+        // 2nd priority: config.properties
         return prop.getProperty(key);
     }
 }
