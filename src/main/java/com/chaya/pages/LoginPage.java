@@ -1,40 +1,31 @@
 package com.chaya.pages;
 
-import com.chaya.utils.WaitUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
-public class LoginPage {
-    private WebDriver driver;
-    private WaitUtils wait;
+public class LoginPage extends BasePage {
 
-    // Locators
+    // Locators (private = encapsulation)
     private By usernameField = By.id("user-name");
     private By passwordField = By.id("password");
     private By loginButton  = By.id("login-button");
     private By errorMessage = By.cssSelector("h3[data-test='error']");
 
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WaitUtils(driver);
+        super(driver);                 // BasePage sets driver + wait
     }
 
     // Actions
     public void enterUsername(String username) {
-        WebElement field = wait.waitForVisible(usernameField);
-        field.clear();
-        field.sendKeys(username);
+        type(usernameField, username);
     }
 
     public void enterPassword(String password) {
-        WebElement field = wait.waitForVisible(passwordField);
-        field.clear();
-        field.sendKeys(password);
+        type(passwordField, password);
     }
 
     public void clickLogin() {
-        wait.waitForClickable(loginButton).click();
+        click(loginButton);
     }
 
     public ProductsPage login(String username, String password) {
@@ -45,6 +36,6 @@ public class LoginPage {
     }
 
     public String getErrorMessage() {
-        return wait.waitForVisible(errorMessage).getText();
+        return getText(errorMessage);
     }
 }

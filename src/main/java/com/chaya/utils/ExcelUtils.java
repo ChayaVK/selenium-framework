@@ -12,6 +12,9 @@ public class ExcelUtils {
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheet(sheetName);
+            if (sheet == null) {     // clear message instead of NullPointerException
+                throw new RuntimeException("Sheet '" + sheetName + "' not found in " + filePath);
+            }
             int rows = sheet.getLastRowNum();              // data rows (header is row 0)
             int cols = sheet.getRow(0).getLastCellNum();   // number of columns
             Object[][] data = new Object[rows][cols];

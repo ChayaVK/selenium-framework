@@ -1,17 +1,24 @@
 pipeline {
     agent any
 
-   parameters {
+    parameters {
         choice(name: 'BROWSER', choices: ['chrome', 'firefox', 'edge'],
                description: 'Browser to run the tests on')
+        booleanParam(name: 'HEADLESS', defaultValue: false,
+               description: 'Run without opening a browser window')
+        choice(name: 'SUITE', choices: ['testng.xml', 'smoke.xml'],
+               description: 'testng.xml = regression, smoke.xml = smoke')
+        string(name: 'URL', defaultValue: 'https://www.saucedemo.com/',
+               description: 'Application URL (environment)')
     }
+
     tools {
         maven 'Maven3'
     }
 
     triggers {
-        cron('H 2 * * *')    // runs nightly around 2 AM
-        pollSCM('H/5 * * * *')   // checks every 5 mins for new commit
+        cron('H 2 * * *')        // runs nightly around 2 AM
+        pollSCM('H/5 * * * *')   // checks GitHub every 5 mins for new commits
     }
 
     stages {
@@ -22,7 +29,8 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                bat 'mvn clean test'
+                // double quotes so Groovy fills in ${params.X}
+                bat "mvn clean test -Dbrowser=${params.BROWSER} -Dheadless=${params.HEADLESS} -DsuiteXmlFile=${params.SUITE} -Durl=${params.URL}"
             }
         }
     }
