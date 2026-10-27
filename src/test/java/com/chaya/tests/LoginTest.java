@@ -23,4 +23,11 @@ public class LoginTest extends BaseTest {
         loginPage.login("wrong_user", "wrong_pass");
         Assert.assertTrue(loginPage.getErrorMessage().contains("do not match"));
     }
+
+    @Test(groups = {"regression"})
+    public void secondInvalidLogin() {
+        LoginPage loginPage = new LoginPage(getDriver());
+        loginPage.login("wrong_user", "wrong_pass");
+        Assert.assertTrue(loginPage.getErrorMessage().contains("do not match"));
+    }
 }
